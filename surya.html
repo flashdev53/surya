@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surya Digital Application Helper</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .step {
+            margin-bottom: 30px;
+            padding: 25px;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .step:hover {
+            border-color: #4a90e2;
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.1);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .step-number {
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .step-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .step-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: transform 0.2s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .response-area {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid #4a90e2;
+        }
+        
+        .success {
+            border-left-color: #28a745;
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .info-box {
+            background: linear-gradient(45deg, #fff3cd, #ffeaa7);
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .warning {
+            background: linear-gradient(45deg, #f8d7da, #fab1a0);
+            border-color: #fab1a0;
+            color: #721c24;
+        }
+        
+        pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+        
+        .file-input {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .file-input input[type=file] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-input-label {
+            display: block;
+            padding: 12px;
+            border: 2px dashed #4a90e2;
+            border-radius: 8px;
+            text-align: center;
+            color: #4a90e2;
+            background: rgba(74, 144, 226, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .file-input:hover .file-input-label {
+            background: rgba(74, 144, 226, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Surya Digital Application Helper</h1>
+            <p>Complete your application step by step</p>
+        </div>
+        
+        <div class="content">
+            <!-- Step 1: Get Reference Data -->
+            <div class="step" id="step1">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Get Reference Data</div>
+                </div>
+                <div class="step-description">
+                    First, we need to fetch the available colleges and branches from the API.
+                </div>
+                <button onclick="getCollegesAndBranches()" id="btn-step1">Fetch Colleges & Branches</button>
+                <div id="response1" class="response-area hidden"></div>
+            </div>
+
+            <!-- Step 2: Start Application -->
+            <div class="step" id="step2">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Start Application</div>
+                </div>
+                <div class="step-description">
+                    Enter your GitHub username and select your college to start the application process.
+                </div>
+                <div class="form-group">
+                    <label for="githubUsername">GitHub Username:</label>
+                    <input type="text" id="githubUsername" placeholder="your-github-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="collegeSelect">Select College:</label>
+                    <select id="collegeSelect" required>
+                        <option value="">-- Please fetch colleges first --</option>
+                    </select>
+                </div>
+                <button onclick="startApplication()" id="btn-step2" disabled>Start Application</button>
+                <div id="response2" class="response-area hidden"></div>
+            </div>
+
+            <!-- Step 3: Create Email File -->
+            <div class="step" id="step3">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Create Email File</div>
+                </div>
+                <div class="step-description">
+                    You must create an email.txt file in your GitHub repository before proceeding.
+                </div>
+                <div class="info-box warning">
+                    <strong>IMPORTANT:</strong> Create a file called <code>email.txt</code> in the root of your GitHub repository containing only your email address. Do NOT create any other files!
+                </div>
+                <div class="form-group">
+                    <label for="emailAddress">Your Email Address:</label>
+                    <input type="email" id="emailAddress" placeholder="your.email@example.com" required>
+                    <small style="color: #666; display: block; margin-top: 5px;">
+                        Copy this email and paste it into the email.txt file in your repository
+                    </small>
+                </div>
+                <button onclick="copyEmail()" id="btn-copy-email">Copy Email</button>
+                <button onclick="confirmEmailFile()" id="btn-step3" style="margin-left: 10px;">I've Created the File</button>
+                <div id="response3" class="response-area hidden"></div>
+            </div>
+
+            <!-- Step 4: Student Details -->
+            <div class="step" id="step4">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Submit Student Details</div>
+                </div>
+                <div class="step-description">
+                    Provide your personal and academic information.
+                </div>
+                <div class="form-group">
+                    <label for="fullName">Full Name:</label>
+                    <input type="text" id="fullName" placeholder="Rohit Sharma" required>
+                </div>
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number:</label>
+                    <input type="text" id="phoneNumber" placeholder="+919876543210" pattern="^\+91[0-9]{10}$" required>
+                    <small style="color: #666;">Format: +91xxxxxxxxxx</small>
+                </div>
+                <div class="form-group">
+                    <label for="usn">USN (University Seat Number):</label>
+                    <input type="text" id="usn" placeholder="4NI18CS001" required>
+                </div>
+                <div class="form-group">
+                    <label for="branchSelect">Select Branch:</label>
+                    <select id="branchSelect" required>
+                        <option value="">-- Please fetch branches first --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tenthPercentage">10th Percentage:</label>
+                    <input type="number" id="tenthPercentage" min="0" max="100" step="0.01" placeholder="85.5" required>
+                </div>
+                <div class="form-group">
+                    <label for="twelfthPercentage">12th Percentage:</label>
+                    <input type="number" id="twelfthPercentage" min="0" max="100" step="0.01" placeholder="87.25" required>
+                </div>
+                <div class="form-group">
+                    <label for="btechCGPA">B.Tech CGPA:</label>
+                    <input type="number" id="btechCGPA" min="0" max="10" step="0.01" placeholder="8.75" required>
+                </div>
+                <button onclick="submitStudentDetails()" id="btn-step4" disabled>Submit Details</button>
+                <div id="response4" class="response-area hidden"></div>
+            </div>
+
+            <!-- Step 5: Upload Resume -->
+            <div class="step" id="step5">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Upload Resume</div>
+                </div>
+                <div class="step-description">
+                    Upload your resume as a PDF file (max 5MB).
+                </div>
+                <div class="form-group">
+                    <label>Resume (PDF only, max 5MB):</label>
+                    <div class="file-input">
+                        <input type="file" id="resumeFile" accept=".pdf" required>
+                        <label for="resumeFile" class="file-input-label">
+                            Click to select PDF file or drag and drop
+                        </label>
+                    </div>
+                </div>
+                <button onclick="uploadResume()" id="btn-step5" disabled>Upload Resume</button>
+                <div id="response5" class="response-area hidden"></div>
+            </div>
+
+            <!-- Step 6: Submit Application -->
+            <div class="step" id="step6">
+                <div class="step-header">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Submit Application</div>
+                </div>
+                <div class="step-description">
+                    Final step: Add optional profile information and submit your application.
+                </div>
+                <div class="info-box">
+                    <strong>Note:</strong> All fields below are optional, but you must call this API to finalize your application. Only fill in fields you have genuine information for.
+                </div>
+                <div class="form-group">
+                    <label for="codeChefUrl">CodeChef Profile URL (optional):</label>
+                    <input type="url" id="codeChefUrl" placeholder="https://www.codechef.com/users/your-username">
+                </div>
+                <div class="form-group">
+                    <label for="codeForcesUrl">CodeForces Profile URL (optional):</label>
+                    <input type="url" id="codeForcesUrl" placeholder="https://codeforces.com/profile/your-username">
+                </div>
+                <div class="form-group">
+                    <label for="projectDetails">Project Details (optional, max 5000 chars):</label>
+                    <textarea id="projectDetails" rows="4" maxlength="5000" placeholder="Description of significant projects you've worked on..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="projectUrl">Project URL (optional, max 1000 chars):</label>
+                    <input type="url" id="projectUrl" placeholder="https://github.com/your-username/project-repo" maxlength="1000">
+                </div>
+                <button onclick="submitApplication()" id="btn-step6" disabled>Submit Application</button>
+                <div id="response6" class="response-area hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BASE_URL = 'https://sortinghat.surya-digital.in';
+        let studentId = null;
+        let colleges = [];
+        let branches = [];
+
+        async function makeRequest(url, options = {}) {
+            try {
+                const response = await fetch(url, {
+                    ...options,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    }
+                });
+                
+                const data = await response.json();
+                return { success: response.ok, data, status: response.status };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        async function getCollegesAndBranches() {
+            const btn = document.getElementById('btn-step1');
+            const response = document.getElementById('response1');
+            
+            btn.disabled = true;
+            btn.textContent = 'Fetching...';
+            
+            try {
+                const [collegesResult, branchesResult] = await Promise.all([
+                    makeRequest(`${BASE_URL}/colleges/`),
+                    makeRequest(`${BASE_URL}/branches/`)
+                ]);
+                
+                if (collegesResult.success && branchesResult.success) {
+                    colleges = collegesResult.data;
+                    branches = branchesResult.data;
+                    
+                    // Populate college dropdown
+                    const collegeSelect = document.getElementById('collegeSelect');
+                    collegeSelect.innerHTML = '<option value="">-- Select a college --</option>';
+                    colleges.forEach(college => {
+                        const option = document.createElement('option');
+                        option.value = college.id;
+                        option.textContent = college.name;
+                        collegeSelect.appendChild(option);
+                    });
+                    
+                    // Populate branch dropdown
+                    const branchSelect = document.getElementById('branchSelect');
+                    branchSelect.innerHTML = '<option value="">-- Select a branch --</option>';
+                    branches.forEach(branch => {
+                        const option = document.createElement('option');
+                        option.value = branch.id;
+                        option.textContent = branch.name;
+                        branchSelect.appendChild(option);
+                    });
+                    
+                    response.innerHTML = `
+                        <div class="success">
+                            <strong>Success!</strong> Fetched ${colleges.length} colleges and ${branches.length} branches.
+                        </div>
+                    `;
+                    response.classList.remove('hidden');
+                    
+                    document.getElementById('btn-step2').disabled = false;
+                } else {
+                    throw new Error('Failed to fetch reference data');
+                }
+            } catch (error) {
+                response.innerHTML = `
+                    <div class="error">
+                        <strong>Error:</strong> ${error.message}
+                    </div>
+                `;
+                response.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Fetch Colleges & Branches';
+            }
+        }
+
+        async function startApplication() {
+            const btn = document.getElementById('btn-step2');
+            const response = document.getElementById('response2');
+            const githubUsername = document.getElementById('githubUsername').value;
+            const collegeId = document.getElementById('collegeSelect').value;
+            
+            if (!githubUsername || !collegeId) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.textContent = 'Starting...';
+            
+            const result = await makeRequest(`${BASE_URL}/startApplication/`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    gitHubUserName: githubUsername,
+                    collegeId: collegeId
+                })
+            });
+            
+            if (result.success) {
+                studentId = result.data.id;
+                response.innerHTML = `
+                    <div class="success">
+                        <strong>Success!</strong> Application started. Your ID is: <code>${studentId}</code>
+                        <br><br>
+                        A private repository has been created for you. Please create the email.txt file before proceeding.
+                    </div>
+                `;
+                response.classList.remove('hidden');
+                document.getElementById('btn-step4').disabled = false;
+                document.getElementById('btn-step5').disabled = false;
+                document.getElementById('btn-step6').disabled = false;
+            } else {
+                response.innerHTML = `
+                    <div class="error">
+                        <strong>Error:</strong> ${result.error || JSON.stringify(result.data)}
+                    </div>
+                `;
+                response.classList.remove('hidden');
+            }
+            
+            btn.disabled = false;
+            btn.textContent = 'Start Application';
+        }
+
+        function copyEmail() {
+            const email = document.getElementById('emailAddress').value;
+            if (!email) {
+                alert('Please enter your email address first');
+                return;
+            }
+            
+            navigator.clipboard.writeText(email).then(() => {
+                alert('Email copied to clipboard! Now paste it into email.txt in your repository.');
+            });
+        }
+
+        function confirmEmailFile() {
+            const response = document.getElementById('response3');
+            response.innerHTML = `
+                <div class="success">
+                    <strong>Confirmed!</strong> Please ensure you've created email.txt with your email address in the repository root.
+                </div>
+            `;
+            response.classList.remove('hidden');
+        }
+
+        async function submitStudentDetails() {
+            if (!studentId) {
+                alert('Please complete Step 2 first');
+                return;
+            }
+            
+            const btn = document.getElementById('btn-step4');
+            const response = document.getElementById('response4');
+            
+            const data = {
+                id: studentId,
+                fullName: document.getElementById('fullName').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                usn: document.getElementById('usn').value,
+                branchId: parseInt(document.getElementById('branchSelect').value),
+                tenthPercentage: parseFloat(document.getElementById('tenthPercentage').value),
+                twelfthPercentage: parseFloat(document.getElementById('twelfthPercentage').value),
+                btechCGPA: parseFloat(document.getElementById('btechCGPA').value)
+            };
+            
+            btn.disabled = true;
+            btn.textContent = 'Submitting...';
+            
+            const result = await makeRequest(`${BASE_URL}/studentDetails/`, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+            
+            if (result.success) {
+                response.innerHTML = `
+                    <div class="success">
+                        <strong>Success!</strong> Student details submitted successfully.
+                    </div>
+                `;
+            } else {
+                response.innerHTML = `
+                    <div class="error">
+                        <strong>Error:</strong> ${result.error || JSON.stringify(result.data)}
+                    </div>
+                `;
+            }
+            
+            response.classList.remove('hidden');
+            btn.disabled = false;
+            btn.textContent = 'Submit Details';
+        }
+
+        async function uploadResume() {
+            if (!studentId) {
+                alert('Please complete Step 2 first');
+                return;
+            }
+            
+            const btn = document.getElementById('btn-step5');
+            const response = document.getElementById('response5');
+            const fileInput = document.getElementById('resumeFile');
+            
+            if (!fileInput.files[0]) {
+                alert('Please select a PDF file');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('student_id', studentId);
+            formData.append('file', fileInput.files[0]);
+            
+            btn.disabled = true;
+            btn.textContent = 'Uploading...';
+            
+            try {
+                const result = await fetch(`${BASE_URL}/uploadResume/`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (result.ok) {
+                    response.innerHTML = `
+                        <div class="success">
+                            <strong>Success!</strong> Resume uploaded successfully.
+                        </div>
+                    `;
+                } else {
+                    const errorData = await result.json();
+                    throw new Error(JSON.stringify(errorData));
+                }
+            } catch (error) {
+                response.innerHTML = `
+                    <div class="error">
+                        <strong>Error:</strong> ${error.message}
+                    </div>
+                `;
+            }
+            
+            response.classList.remove('hidden');
+            btn.disabled = false;
+            btn.textContent = 'Upload Resume';
+        }
+
+        async function submitApplication() {
+            if (!studentId) {
+                alert('Please complete Step 2 first');
+                return;
+            }
+            
+            const btn = document.getElementById('btn-step6');
+            const response = document.getElementById('response6');
+            
+            const data = {
+                id: studentId
+            };
+            
+            const codeChefUrl = document.getElementById('codeChefUrl').value;
+            const codeForcesUrl = document.getElementById('codeForcesUrl').value;
+            const projectDetails = document.getElementById('projectDetails').value;
+            const projectUrl = document.getElementById('projectUrl').value;
+            
+            if (codeChefUrl) data.codeChefProfileUrl = codeChefUrl;
+            if (codeForcesUrl) data.codeForcesProfileUrl = codeForcesUrl;
+            if (projectDetails) data.projectDetails = projectDetails;
+            if (projectUrl) data.projectDetailsUrl = projectUrl;
+            
+            btn.disabled = true;
+            btn.textContent = 'Submitting...';
+            
+            const result = await makeRequest(`${BASE_URL}/submit/`, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+            
+            if (result.success) {
+                response.innerHTML = `
+                    <div class="success">
+                        <strong> Application Submitted Successfully!</strong><br>
+                        Your application has been completed. Application ID: <code>${result.data.id}</code>
+                    </div>
+                `;
+            } else {
+                response.innerHTML = `
+                    <div class="error">
+                        <strong>Error:</strong> ${result.error || JSON.stringify(result.data)}
+                    </div>
+                `;
+            }
+            
+            response.classList.remove('hidden');
+            btn.disabled = false;
+            btn.textContent = 'Submit Application';
+        }
+
+        document.getElementById('resumeFile').addEventListener('change', function(e) {
+            const label = document.querySelector('.file-input-label');
+            if (e.target.files[0]) {
+                label.textContent = `Selected: ${e.target.files[0].name}`;
+            } else {
+                label.textContent = 'Click to select PDF file or drag and drop';
+            }
+        });
+    </script>
+</body>
+</html>
